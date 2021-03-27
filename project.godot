@@ -1,0 +1,36 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Resource",
+"class": "PatchStamp",
+"language": "GDScript",
+"path": "res://addons/kitfka.patch_tool/tools/patch_stamp.gd"
+} ]
+_global_script_class_icons={
+"PatchStamp": ""
+}
+
+[application]
+
+config/name="Godot Patch Tool"
+config/icon="res://icon.png"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "zylann.translation_editor" )
+
+[patch_tool]
+
+data_folder="res://addons/kitfka.patch_tool/data/"
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
