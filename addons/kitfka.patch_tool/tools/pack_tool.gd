@@ -11,6 +11,7 @@ var allFiles : Array
 
 var ExcludedExtensions : Array
 var ExcludedPaths : Array
+var ExcludedFilePaths : Array
 
 
 
@@ -20,6 +21,7 @@ func _ready():
 		ExcludedExtensions = ProjectSettings.get_setting("patch_tool/excluded_extensions")
 	else:
 		ExcludedExtensions = ["cs", "import"]
+	
 	if ProjectSettings.has_setting("patch_tool/ignored_folders"):
 		ExcludedPaths = ProjectSettings.get_setting("patch_tool/ignored_folders")
 	else:
@@ -28,6 +30,10 @@ func _ready():
 		".import",
 		".mono",
 		]
+	if ProjectSettings.has_setting("patch_tool/excluded_filepaths"):
+		ExcludedFilePaths = ProjectSettings.get_setting("patch_tool/excluded_filepaths")
+	else:
+		ExcludedFilePaths = []
 		
 func check_data():
 	if data:
@@ -41,6 +47,8 @@ func testRunSet(value):
 	_ready()
 	print("extension ignored: ", ExcludedExtensions)
 	print("Folders ignored: ", ExcludedPaths)
+	print("filepaths ignored: ", ExcludedFilePaths)
+	
 	load_data()
 	JSON.print(data.ddata, "\t")
 	testRun = false
@@ -122,6 +130,10 @@ func is_valid_file(path:String, fileName:String) -> bool:
 		return false
 	
 	var fullPath = path+fileName
+	print(fullPath, ExcludedFilePaths)
+	if fullPath in ExcludedFilePaths:
+		return false
+	
 	var extension = fullPath.get_extension()
 	if extension in ExcludedExtensions:
 		print("We are going to ignore the file: ", fileName)

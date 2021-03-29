@@ -127,6 +127,7 @@ func _on_editMenu_pressed(id):
 
 
 func _on_ScanButton_pressed():
+	_packtool._ready()
 	_packtool.load_data()
 	_packtool.save_data()
 	_fileChangeList_itemList.clear()
