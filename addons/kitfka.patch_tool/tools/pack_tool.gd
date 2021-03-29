@@ -45,9 +45,7 @@ func testRunSet(value):
 	JSON.print(data.ddata, "\t")
 	testRun = false
 	
-#func testExportRunSet(value):
-#	create_patch("res://")
-#	testExport = false
+
 	
 func load_data():
 	var filepath:String
@@ -156,7 +154,8 @@ func create_patch(ExportPath:String="res://", packName:String="test.pck"):
 		return
 	
 	var packer = PCKPacker.new()
-	packer.pck_start("test.pck")
+	data.patchHistory.append(packName)
+	packer.pck_start(ExportPath+packName)
 	for k in data.ddata:
 		if data.ddata[k].updated_file:
 			print(k,"-", data.ddata[k].current_file_hash)
@@ -175,6 +174,14 @@ func to_patch() -> Array:
 func reset_complete():
 	data.ddata.clear()
 	
+func initial_setup():
+	if data:
+		print("data not null")
+		return ERR_ALREADY_EXISTS
+	else:
+		data = PatchStamp.new()
+		save_data()
+		return OK
 
 func save_data():
 	var filepath:String
@@ -187,7 +194,20 @@ func save_data():
 			ResourceSaver.save(filepath, data)
 		else:
 			print("File did not exist?")
-	
+
+func get_patchHistory() -> Array:
+	if data:
+		return data.patchHistory
+	else:
+		return []
+
+func get_defaultPatchName() -> String:
+	var r = get_patchHistory()
+	if r == []:
+		return "patch_000"
+	else:
+		return r.back()
+
 static func get_hash(filePath:String) -> String:
 	print(filePath)
 	var file = File.new()

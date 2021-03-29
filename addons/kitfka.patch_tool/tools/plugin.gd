@@ -5,7 +5,7 @@ extends EditorPlugin
 
 const PatchEditor = preload("./patch_editor.gd")
 const PatchEditorScene = preload("./patch_editor.tscn")
-const Logger = preload("./util/logger.gd")
+
 
 const _default_settings = {
 	"patch_tool/search_root": "res://",
@@ -19,7 +19,7 @@ const _default_settings = {
 }
 
 var _main_control : PatchEditor = null
-var _logger = Logger.get_for(self)
+
 
 
 func _enter_tree():
@@ -29,7 +29,7 @@ func _enter_tree():
 			ProjectSettings.set_setting(key, v)
 			ProjectSettings.set_initial_value(key, v)
 	ProjectSettings.save()
-	_logger.debug("PatchTool plugin Enter tree")
+
 	var editor_interface := get_editor_interface()
 	var base_control := editor_interface.get_base_control()
 	
@@ -42,7 +42,6 @@ func _enter_tree():
 
 
 func _exit_tree():
-	_logger.debug("PatchTool plugin Exit tree")
 	# The main control is not freed when the plugin is disabled
 	_main_control.queue_free()
 	_main_control = null
