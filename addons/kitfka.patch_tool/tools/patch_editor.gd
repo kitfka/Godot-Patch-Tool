@@ -85,8 +85,6 @@ func _on_BuildButton_pressed():
 		_status_label.text = "Build failed, patch name is empty"
 		return
 	
-	
-	
 	var f = File.new()
 	if f.file_exists("res://addons/kitfka.patch_tool/data/"+patchName+".pck"):
 		_status_label.text = "Build failed, patch file already exists."
@@ -111,7 +109,9 @@ func _on_editMenu_pressed(id):
 		EDITMENU_RESET_COMPLETE:
 			print("EDITMENU_RESET_COMPLETE")
 			_packtool.reset_complete()
-			_packtool.save_data()
+			reload_gui()
+			call_deferred("_on_ScanButton_pressed") #18 BUG, this doesn't work 
+#			_on_ScanButton_pressed()
 			
 		EDITMENU_SCAN:
 			print("EDITMENU_SCAN")
@@ -123,7 +123,7 @@ func _on_editMenu_pressed(id):
 				_status_label.text = "oke, init was done"
 			else:
 				_status_label.text = "Init failed"
-			
+		
 
 
 func _on_ScanButton_pressed():

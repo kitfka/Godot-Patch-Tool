@@ -172,7 +172,8 @@ func to_patch() -> Array:
 	return resultArray
 
 func reset_complete():
-	data.ddata.clear()
+	data = PatchStamp.new()
+	save_data()
 	
 func initial_setup():
 	if data:

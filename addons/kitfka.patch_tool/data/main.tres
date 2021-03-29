@@ -4,48 +4,44 @@
 
 [resource]
 script = ExtResource( 1 )
-name = "fas"
+name = ""
 data = [  ]
 ddata = {
 "res://.gitignore": {
 "current_file_hash": "1dde65139c1d916f22bb174abdc03ecf",
-"updated_file": false
+"updated_file": true
 },
 "res://CHANGELOG.md": {
 "current_file_hash": "6953068e4c84d213d3646a56470432e3",
-"updated_file": false
+"updated_file": true
 },
 "res://README.md": {
 "current_file_hash": "1681f21f8adb6d3d3f93813f03566f5a",
-"updated_file": false
+"updated_file": true
 },
 "res://Test.gd": {
 "current_file_hash": "fe749f795372d0a3a673c49ad844504d",
-"updated_file": false
+"updated_file": true
 },
 "res://Test.tscn": {
-"current_file_hash": "6c2643929ca2f692b92084d25b761d40",
+"current_file_hash": "c1f3c6c43db64486f7165a4b61a33864",
 "updated_file": true
 },
 "res://default_env.tres": {
 "current_file_hash": "756de160834ef7cc033c2a79cd80f338",
-"updated_file": false
+"updated_file": true
 },
 "res://icon.png": {
 "current_file_hash": "47313fa4c47a9963fddd764e1ec6e4a8",
-"updated_file": false
+"updated_file": true
 },
 "res://lala/new scene.tscn": {
 "current_file_hash": "40aa2da275c77d847eaffea53018cc86",
-"updated_file": false
+"updated_file": true
 },
 "res://project.godot": {
 "current_file_hash": "4b300aba0e4e9a9800870d6ce5cbc8eb",
-"updated_file": false
-},
-"res://test.pck": {
-"current_file_hash": "312ec09570a53794ae5dc5154a83edb0",
-"updated_file": false
+"updated_file": true
 }
 }
-patchHistory = [ ".pck", ".pck", "patch_testt.pck", "patch_001.pck" ]
+patchHistory = [  ]
