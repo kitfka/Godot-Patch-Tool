@@ -24,5 +24,5 @@ The folder that will contain the json data with all the hashes.
 `patch_tool/excluded_extensions = ["cs", "import"]`
 extensions that will be ignored without a '.'
 
-`patch_tool/excluded_filepaths = []`
+`patch_tool/excluded_filepaths = ["res://export_presets.cfg"]`
 excluded files with path. For example: `res://addons/kitfka.patch_tool/tools/patch_stamp.gd`

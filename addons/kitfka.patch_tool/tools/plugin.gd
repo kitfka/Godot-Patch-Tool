@@ -16,8 +16,8 @@ const _default_settings = {
 		".mono",
 		],
 	"patch_tool/data_folder": "res://addons/kitfka.patch_tool/data",
-	"patch_tool/excluded_extensions": ["cs", "import"],
-	"patch_tool/excluded_filepaths": [], #res://example.tscn
+	"patch_tool/excluded_extensions": ["cs", "import", "csproj", "sln"],
+	"patch_tool/excluded_filepaths": ["res://export_presets.cfg"], #res://example.tscn
 }
 
 var _main_control : PatchEditor = null
