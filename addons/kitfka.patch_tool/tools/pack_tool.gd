@@ -10,6 +10,7 @@ var allFiles : Array
 var ExcludedExtensions : Array
 var ExcludedPaths : Array
 var ExcludedFilePaths : Array
+var VerbosePrinting : bool
 
 
 
@@ -17,8 +18,17 @@ func _ready():
 	check_data()
 	reload_settings()
 
+#verbose printing. Not a great solution, mayby replace this.
+func vprint(txt):
+	if VerbosePrinting:
+		print(txt)
 
 func reload_settings():
+	if ProjectSettings.has_setting("patch_tool/print_verbose"):
+		VerbosePrinting = ProjectSettings.get_setting("patch_tool/print_verbose")
+	else:
+		VerbosePrinting = false
+		
 	if ProjectSettings.has_setting("patch_tool/excluded_extensions"):
 		ExcludedExtensions = ProjectSettings.get_setting("patch_tool/excluded_extensions")
 	else:
@@ -54,19 +64,19 @@ func load_data():
 		if ProjectSettings.has_setting("patch_tool/data_folder"):
 			filepath = ProjectSettings.get_setting("patch_tool/data_folder")
 			filepath += "/main.tres"
-			print(filepath)
+			vprint(filepath)
 			var f = File.new()
 			if f.file_exists(filepath):
 				data = ResourceLoader.load(filepath)
 			else:
-				print("File did not exist?")
+				vprint("File did not exist?")
 #			data = ResourceLoader.load(filepath, "res://addons/kitfka.patch_tool/tools/patch_stamp.gd")
 			
 		else:
-			print("The option patch_tool/data_folder did not exist")
+			vprint("The option patch_tool/data_folder did not exist")
 			return
 	else:
-		print("Data was already found")
+		vprint("Data was already found")
 	check_data()
 	
 	find_all_files("res://")
@@ -74,7 +84,7 @@ func load_data():
 
 func new_diff(complete:bool = false):
 	if !ValidData:
-		print("No valid data found")
+		vprint("No valid data found")
 		return
 	
 	if data.data.size() == 0:
@@ -94,17 +104,17 @@ func find_all_files(path:String):
 				if is_valid_folder(file_name):
 					find_all_files("res://"+file_name+"/")
 				else:
-					print("Skipped directory: " + file_name)
+					vprint("Skipped directory: " + file_name)
 				
 			else:
 				if _is_valid_file(path, file_name): 
-					print("Found file: " + file_name, "-",get_hash(path + file_name))
+					vprint("Found file: " + file_name+"-"+get_hash(path + file_name))
 					_handle_file(path+file_name, get_hash(path + file_name))
 				else:
-					print("Skipped file: " + file_name)
+					vprint("Skipped file: " + file_name)
 			file_name = dir.get_next()
 	else:
-		print("An error occurred when trying to access the path.")
+		vprint("An error occurred when trying to access the path.")
 
 
 func is_valid_folder(path) -> bool:
@@ -121,17 +131,16 @@ func _is_valid_file(path:String, fileName:String) -> bool:
 		return false
 	
 	if fileName.find(".") == -1:
-		print("Will not have a extension?", fileName)
+		vprint("Will not have a extension?"+fileName)
 		return false
 	
 	var fullPath = path+fileName
-	print(fullPath, ExcludedFilePaths)
 	if fullPath in ExcludedFilePaths:
 		return false
 	
 	var extension = fullPath.get_extension()
 	if extension in ExcludedExtensions:
-		print("We are going to ignore the file: ", fileName)
+		vprint("We are going to ignore the file: "+fileName)
 		return false
 	return true
 
@@ -158,9 +167,9 @@ func is_there_a_updated_file() -> bool:
 
 func create_patch(ExportPath:String="res://", packName:String="test.pck"):
 	if is_there_a_updated_file():
-		print("start patch")
+		vprint("start patch")
 	else:
-		print("nothing to patch")
+		vprint("nothing to patch")
 		return
 	
 	var packer = PCKPacker.new()
@@ -168,7 +177,7 @@ func create_patch(ExportPath:String="res://", packName:String="test.pck"):
 	packer.pck_start(ExportPath+packName)
 	for k in data.data:
 		if data.data[k].updated_file:
-			print(k,"-", data.data[k].current_file_hash)
+			vprint(k+"-"+ data.data[k].current_file_hash)
 			data.data[k].updated_file = false # mark this file as procesed
 			packer.add_file(k, k)
 	packer.flush(true)
@@ -190,7 +199,7 @@ func reset_complete():
 
 func initial_setup():
 	if data:
-		print("data not null")
+		vprint("data not null")
 		return ERR_ALREADY_EXISTS
 	else:
 		data = PatchStamp.new()
@@ -207,7 +216,7 @@ func save_data():
 		if f.file_exists(filepath):
 			ResourceSaver.save(filepath, data)
 		else:
-			print("File did not exist?")
+			vprint("File did not exist?")
 
 
 func get_patchHistory() -> Array:

@@ -8,6 +8,7 @@ const PatchEditorScene = preload("./patch_editor.tscn")
 
 
 const _default_settings = {
+	"patch_tool/print_verbose": false,
 	"patch_tool/search_root": "res://",
 	"patch_tool/ignored_folders": [
 		"addons", 
@@ -16,7 +17,7 @@ const _default_settings = {
 		],
 	"patch_tool/data_folder": "res://addons/kitfka.patch_tool/data",
 	"patch_tool/excluded_extensions": ["cs", "import"],
-	"patch_tool/excluded_filepaths": [] #res://example.tscn
+	"patch_tool/excluded_filepaths": [], #res://example.tscn
 }
 
 var _main_control : PatchEditor = null
