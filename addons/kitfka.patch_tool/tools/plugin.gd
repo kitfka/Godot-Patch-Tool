@@ -57,7 +57,7 @@ func get_plugin_name() -> String:
 
 
 func get_plugin_icon() -> Texture:
-	return preload("icons/icon_translation_editor.svg")
+	return preload("icons/patch_icon.png")
 
 
 func make_visible(visible: bool):

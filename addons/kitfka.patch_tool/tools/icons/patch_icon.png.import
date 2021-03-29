@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon_translation_editor.svg-b4641cc64c44b46cc7b25fa9b52ee6ab.stex"
+path="res://.import/patch_icon.png-d95c77f6556f8dbad8ec42b6f30ee4bf.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/kitfka.patch_tool/tools/icons/icon_translation_editor.svg"
-dest_files=[ "res://.import/icon_translation_editor.svg-b4641cc64c44b46cc7b25fa9b52ee6ab.stex" ]
+source_file="res://addons/kitfka.patch_tool/tools/icons/patch_icon.png"
+dest_files=[ "res://.import/patch_icon.png-d95c77f6556f8dbad8ec42b6f30ee4bf.stex" ]
 
 [params]
 
