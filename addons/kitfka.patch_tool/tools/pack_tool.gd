@@ -102,7 +102,8 @@ func find_all_files(path:String):
 		while file_name != "":
 			if dir.current_is_dir():
 				if is_valid_folder(file_name):
-					find_all_files("res://"+file_name+"/")
+					vprint("Loop through directory: " + path+file_name+"/")
+					find_all_files(path+file_name+"/")
 				else:
 					vprint("Skipped directory: " + file_name)
 				
