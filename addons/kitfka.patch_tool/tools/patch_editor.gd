@@ -72,7 +72,7 @@ func configure_for_godot_integration(base_control: Control):
 	self_modulate = Color(0, 0, 0, 0)
 
 
-#signal stuff
+#signals
 func _on_BuildButton_pressed():
 	if patchName == "":
 		_status_label.text = "Build failed, patch name is empty"
@@ -130,3 +130,7 @@ func _on_ScanButton_pressed():
 	for a in l:
 		_fileChangeList_itemList.add_item(a, null, false)
 	reload_gui()
+
+
+func _on_ClearSearch_pressed():
+	pass # Replace with function body.

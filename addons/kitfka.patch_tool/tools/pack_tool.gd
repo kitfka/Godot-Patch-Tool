@@ -1,8 +1,6 @@
 tool
 extends Node
 
-export(bool) var testRun setget _testRunSet
-#export(bool) var testExport setget testExportRunSet thiss will bring problems
 
 export(Resource) var data
 
@@ -47,17 +45,6 @@ func check_data():
 			return
 			
 		ValidData = true
-
-
-func _testRunSet(value):
-	_ready()
-	print("extension ignored: ", ExcludedExtensions)
-	print("Folders ignored: ", ExcludedPaths)
-	print("filepaths ignored: ", ExcludedFilePaths)
-	
-	load_data()
-	JSON.print(data.data, "\t")
-	testRun = false
 
 
 func load_data():
