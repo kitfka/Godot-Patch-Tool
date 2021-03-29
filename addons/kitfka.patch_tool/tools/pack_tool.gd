@@ -87,7 +87,9 @@ func find_all_files(path:String):
 		while file_name != "":
 			if dir.current_is_dir():
 				if is_valid_folder(file_name):
-					print("Found directory: " + file_name)
+					print("Start on folder: " + file_name)
+					find_all_files("res://"+file_name+"/")
+					print("We did folder: " + file_name)
 				else:
 					print("Skipped directory: " + file_name)
 				
@@ -124,6 +126,7 @@ func is_valid_file(path:String, fileName:String) -> bool:
 	return true
 
 static func get_hash(filePath:String) -> String:
+	print(filePath)
 	var file = File.new()
 #	file.open(filePath, File.READ)
 #	file.store_string(content)
