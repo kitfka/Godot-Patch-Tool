@@ -6,6 +6,8 @@ const Logger = preload("./util/logger.gd")
 
 onready var _build_button : Button = $VBoxContainer/Main/LeftPane/StringListActions/BuildButton
 onready var _status_label : Label = $VBoxContainer/StatusBar/Label
+onready var _fileChangeList_itemList : ItemList = \
+$VBoxContainer/Main/RightPane/VSplitContainer/FileChangeList
 
 var _base_control : Control = null
 

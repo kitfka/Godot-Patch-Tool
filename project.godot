@@ -23,13 +23,9 @@ _global_script_class_icons={
 config/name="Godot Patch Tool"
 config/icon="res://icon.png"
 
-[editor_plugins]
-
-enabled=PoolStringArray( "zylann.translation_editor" )
-
 [patch_tool]
 
-data_folder="res://addons/kitfka.patch_tool/data/"
+data_folder="res://addons/kitfka.patch_tool/data"
 
 [rendering]
 

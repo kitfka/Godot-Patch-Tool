@@ -1,10 +1,12 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://addons/zylann.translation_editor/tools/icons/icon_load.svg" type="Texture" id=1]
-[ext_resource path="res://addons/zylann.translation_editor/tools/icons/icon_save.svg" type="Texture" id=2]
+[ext_resource path="res://addons/kitfka.patch_tool/tools/icons/icon_load.svg" type="Texture" id=1]
+[ext_resource path="res://addons/kitfka.patch_tool/tools/icons/icon_save.svg" type="Texture" id=2]
 [ext_resource path="res://addons/kitfka.patch_tool/tools/patch_editor.gd" type="Script" id=3]
 [ext_resource path="res://addons/kitfka.patch_tool/tools/pack_tool.gd" type="Script" id=4]
 [ext_resource path="res://addons/kitfka.patch_tool/data/main.tres" type="Resource" id=5]
+
+
 
 [node name="PatchEditor" type="Panel"]
 anchor_right = 1.0
@@ -123,12 +125,12 @@ margin_bottom = 574.0
 size_flags_vertical = 3
 split_offset = 250
 
-[node name="TranslationTabContainer" type="TabContainer" parent="VBoxContainer/Main/RightPane/VSplitContainer"]
+[node name="FileChangeList" type="ItemList" parent="VBoxContainer/Main/RightPane/VSplitContainer"]
 margin_right = 813.0
-margin_bottom = 286.0
-tab_align = 0
+margin_bottom = 574.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Main/RightPane/VSplitContainer"]
+visible = false
 margin_top = 298.0
 margin_right = 813.0
 margin_bottom = 574.0
