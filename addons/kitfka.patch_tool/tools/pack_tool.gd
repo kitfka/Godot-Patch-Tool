@@ -2,6 +2,8 @@ tool
 extends Node
 
 export(bool) var testRun setget testRunSet
+export(bool) var testExport setget testExportRunSet
+
 export(Resource) var data
 
 var ValidData = false
@@ -39,8 +41,15 @@ func check_data():
 
 func testRunSet(value):
 	_ready()
+	print("extension ignored: ", ExcludedExtensions)
+	print("Folders ignored: ", ExcludedPaths)
 	load_data()
+	JSON.print(data.ddata, "\t")
 	testRun = false
+	
+func testExportRunSet(value):
+	create_patch("res://")
+	testExport = false
 	
 func load_data():
 	var filepath:String
@@ -77,8 +86,7 @@ func new_diff(complete:bool = false):
 func find_all_files(path:String):
 	if !ValidData:
 		return
-	print("extension ignored: ", ExcludedExtensions)
-	print("Folders ignored: ", ExcludedPaths)
+
 	
 	var dir = Directory.new()
 	if dir.open(path) == OK:
@@ -87,15 +95,14 @@ func find_all_files(path:String):
 		while file_name != "":
 			if dir.current_is_dir():
 				if is_valid_folder(file_name):
-					print("Start on folder: " + file_name)
 					find_all_files("res://"+file_name+"/")
-					print("We did folder: " + file_name)
 				else:
 					print("Skipped directory: " + file_name)
 				
 			else:
 				if is_valid_file(path, file_name): 
 					print("Found file: " + file_name, "-",get_hash(path + file_name))
+					handle_file(path+file_name, get_hash(path + file_name))
 				else:
 					print("Skipped file: " + file_name)
 			file_name = dir.get_next()
@@ -125,6 +132,40 @@ func is_valid_file(path:String, fileName:String) -> bool:
 		return false
 	return true
 
+func handle_file(filePath:String, fileHash:String):
+	if data.ddata.has(filePath):
+		if data.ddata[filePath].current_file_hash != fileHash:
+			data.ddata[filePath].current_file_hash = fileHash
+			data.ddata[filePath].updated_file = true
+	else:
+		data.ddata[filePath] = {
+			"current_file_hash": fileHash,
+			"updated_file": true
+		}
+
+func is_there_a_updated_file() -> bool:
+	var result = false
+	for k in data.ddata:
+		if data.ddata[k].updated_file:
+			result = true
+	return result
+	
+func create_patch(ExportPath:String="res://", packName:String="test.pck"):
+	if is_there_a_updated_file():
+		print("start patch")
+	else:
+		print("nothing to patch")
+		return
+	
+	var packer = PCKPacker.new()
+	packer.pck_start("test.pck")
+	for k in data.ddata:
+		if data.ddata[k].updated_file:
+			print(k,"-", data.ddata[k].current_file_hash)
+			data.ddata[k].updated_file = false # mark this file as procesed
+			packer.add_file(k, k)
+	packer.flush(true)
+		
 static func get_hash(filePath:String) -> String:
 	print(filePath)
 	var file = File.new()

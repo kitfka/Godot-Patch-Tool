@@ -21,6 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Godot Patch Tool"
+run/main_scene="res://Test.tscn"
 config/icon="res://icon.png"
 
 [patch_tool]
