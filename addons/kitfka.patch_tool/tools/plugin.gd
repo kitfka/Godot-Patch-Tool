@@ -1,6 +1,8 @@
 tool
 extends EditorPlugin
 # I used zylann.translation_editor as a template. His stuff is great :D
+# https://github.com/Zylann/godot_translation_editor 
+
 const PatchEditor = preload("./patch_editor.gd")
 const PatchEditorScene = preload("./patch_editor.tscn")
 const Logger = preload("./util/logger.gd")
@@ -8,8 +10,9 @@ const Logger = preload("./util/logger.gd")
 const _default_settings = {
 	"patch_tool/search_root": "res://",
 	"patch_tool/ignored_folders": [
-		"res://addons", 
-		"res://.import",
+		"addons", 
+		".import",
+		".mono",
 		],
 	"patch_tool/data_folder": "res://addons/kitfka.patch_tool/data",
 	"patch_tool/excluded_extensions": ["cs", "import"]

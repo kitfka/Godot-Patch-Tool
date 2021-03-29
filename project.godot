@@ -24,10 +24,6 @@ config/name="Godot Patch Tool"
 run/main_scene="res://Test.tscn"
 config/icon="res://icon.png"
 
-[patch_tool]
-
-data_folder="res://addons/kitfka.patch_tool/data"
-
 [rendering]
 
 environment/default_environment="res://default_env.tres"

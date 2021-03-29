@@ -24,7 +24,6 @@ margin_right = -4.0
 margin_bottom = -4.0
 
 [node name="MenuBar" type="HBoxContainer" parent="VBoxContainer"]
-visible = false
 margin_right = 1016.0
 margin_bottom = 20.0
 
@@ -64,6 +63,7 @@ disabled = true
 icon = ExtResource( 2 )
 
 [node name="Main" type="HSplitContainer" parent="VBoxContainer"]
+margin_top = 24.0
 margin_right = 1016.0
 margin_bottom = 574.0
 size_flags_vertical = 3
@@ -71,16 +71,29 @@ split_offset = 100
 
 [node name="LeftPane" type="VBoxContainer" parent="VBoxContainer/Main"]
 margin_right = 191.0
-margin_bottom = 574.0
+margin_bottom = 550.0
+
+[node name="StringList" type="ItemList" parent="VBoxContainer/Main/LeftPane"]
+margin_right = 191.0
+margin_bottom = 480.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Main/LeftPane"]
+margin_top = 484.0
+margin_right = 191.0
+margin_bottom = 498.0
+text = "Patch Name:"
 
 [node name="Search" type="HBoxContainer" parent="VBoxContainer/Main/LeftPane"]
+margin_top = 502.0
 margin_right = 191.0
-margin_bottom = 24.0
+margin_bottom = 526.0
 
-[node name="Search" type="LineEdit" parent="VBoxContainer/Main/LeftPane/Search"]
+[node name="FileName" type="LineEdit" parent="VBoxContainer/Main/LeftPane/Search"]
 margin_right = 191.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
+text = "patch_0"
 
 [node name="ClearSearch" type="Button" parent="VBoxContainer/Main/LeftPane/Search"]
 visible = false
@@ -89,16 +102,10 @@ margin_right = 273.0
 margin_bottom = 24.0
 text = "x"
 
-[node name="StringList" type="ItemList" parent="VBoxContainer/Main/LeftPane"]
-margin_top = 28.0
+[node name="StringListActions" type="HBoxContainer" parent="VBoxContainer/Main/LeftPane"]
+margin_top = 530.0
 margin_right = 191.0
 margin_bottom = 550.0
-size_flags_vertical = 3
-
-[node name="StringListActions" type="HBoxContainer" parent="VBoxContainer/Main/LeftPane"]
-margin_top = 554.0
-margin_right = 191.0
-margin_bottom = 574.0
 
 [node name="LoadButton" type="Button" parent="VBoxContainer/Main/LeftPane/StringListActions"]
 margin_right = 42.0
@@ -115,17 +122,17 @@ text = "Build"
 [node name="RightPane" type="VBoxContainer" parent="VBoxContainer/Main"]
 margin_left = 203.0
 margin_right = 1016.0
-margin_bottom = 574.0
+margin_bottom = 550.0
 
 [node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer/Main/RightPane"]
 margin_right = 813.0
-margin_bottom = 574.0
+margin_bottom = 550.0
 size_flags_vertical = 3
 split_offset = 250
 
 [node name="FileChangeList" type="ItemList" parent="VBoxContainer/Main/RightPane/VSplitContainer"]
 margin_right = 813.0
-margin_bottom = 574.0
+margin_bottom = 550.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Main/RightPane/VSplitContainer"]
 visible = false
@@ -160,9 +167,9 @@ script = ExtResource( 4 )
 data = ExtResource( 5 )
 [connection signal="pressed" from="VBoxContainer/MenuBar/OpenButton" to="." method="_on_OpenButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/MenuBar/SaveButton" to="." method="_on_SaveButton_pressed"]
-[connection signal="text_changed" from="VBoxContainer/Main/LeftPane/Search/Search" to="." method="_on_Search_text_changed"]
-[connection signal="pressed" from="VBoxContainer/Main/LeftPane/Search/ClearSearch" to="." method="_on_ClearSearch_pressed"]
 [connection signal="item_selected" from="VBoxContainer/Main/LeftPane/StringList" to="." method="_on_StringList_item_selected"]
+[connection signal="text_changed" from="VBoxContainer/Main/LeftPane/Search/FileName" to="." method="_on_FileName_text_changed"]
+[connection signal="pressed" from="VBoxContainer/Main/LeftPane/Search/ClearSearch" to="." method="_on_ClearSearch_pressed"]
 [connection signal="pressed" from="VBoxContainer/Main/LeftPane/StringListActions/LoadButton" to="." method="_on_LoadButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/Main/LeftPane/StringListActions/BuildButton" to="." method="_on_BuildButton_pressed"]
 [connection signal="text_changed" from="VBoxContainer/Main/RightPane/VSplitContainer/VBoxContainer/NotesEdit" to="." method="_on_NotesEdit_text_changed"]

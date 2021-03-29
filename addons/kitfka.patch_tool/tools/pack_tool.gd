@@ -2,7 +2,7 @@ tool
 extends Node
 
 export(bool) var testRun setget testRunSet
-export(bool) var testExport setget testExportRunSet
+#export(bool) var testExport setget testExportRunSet thiss will bring problems
 
 export(Resource) var data
 
@@ -18,12 +18,10 @@ func _ready():
 	check_data()
 	if ProjectSettings.has_setting("patch_tool/excluded_extensions"):
 		ExcludedExtensions = ProjectSettings.get_setting("patch_tool/excluded_extensions")
-		print(ExcludedExtensions)
 	else:
 		ExcludedExtensions = ["cs", "import"]
 	if ProjectSettings.has_setting("patch_tool/ignored_folders"):
-		ExcludedPaths = ProjectSettings.get_setting("patch_tool/excluded_extensions")
-		print(ExcludedPaths)
+		ExcludedPaths = ProjectSettings.get_setting("patch_tool/ignored_folders")
 	else:
 		ExcludedPaths = [
 		"addons", 
@@ -47,9 +45,9 @@ func testRunSet(value):
 	JSON.print(data.ddata, "\t")
 	testRun = false
 	
-func testExportRunSet(value):
-	create_patch("res://")
-	testExport = false
+#func testExportRunSet(value):
+#	create_patch("res://")
+#	testExport = false
 	
 func load_data():
 	var filepath:String
@@ -165,7 +163,31 @@ func create_patch(ExportPath:String="res://", packName:String="test.pck"):
 			data.ddata[k].updated_file = false # mark this file as procesed
 			packer.add_file(k, k)
 	packer.flush(true)
-		
+
+func to_patch() -> Array:
+	var resultArray = []
+	for k in data.ddata:
+		if data.ddata[k].updated_file:
+			resultArray.append(k)
+
+	return resultArray
+
+func reset_complete():
+	data.ddata.clear()
+	
+
+func save_data():
+	var filepath:String
+	if ProjectSettings.has_setting("patch_tool/data_folder"):
+		filepath = ProjectSettings.get_setting("patch_tool/data_folder")
+		filepath += "/main.tres"
+		print(filepath)
+		var f = File.new()
+		if f.file_exists(filepath):
+			ResourceSaver.save(filepath, data)
+		else:
+			print("File did not exist?")
+	
 static func get_hash(filePath:String) -> String:
 	print(filePath)
 	var file = File.new()
