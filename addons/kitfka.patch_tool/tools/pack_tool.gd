@@ -24,8 +24,9 @@ func _ready():
 		print(ExcludedPaths)
 	else:
 		ExcludedPaths = [
-		"res://addons", 
-		"res://.import",
+		"addons", 
+		".import",
+		".mono",
 		]
 		
 func check_data():
@@ -77,13 +78,19 @@ func find_all_files(path:String):
 	if !ValidData:
 		return
 	print("extension ignored: ", ExcludedExtensions)
+	print("Folders ignored: ", ExcludedPaths)
+	
 	var dir = Directory.new()
 	if dir.open(path) == OK:
 		dir.list_dir_begin(true, true)
 		var file_name = dir.get_next()
 		while file_name != "":
 			if dir.current_is_dir():
-				print("Found directory: " + file_name)
+				if is_valid_folder(file_name):
+					print("Found directory: " + file_name)
+				else:
+					print("Skipped directory: " + file_name)
+				
 			else:
 				if is_valid_file(path, file_name): 
 					print("Found file: " + file_name, "-",get_hash(path + file_name))
@@ -94,10 +101,12 @@ func find_all_files(path:String):
 		print("An error occurred when trying to access the path.")
 
 func is_valid_folder(path) -> bool:
-	if (ExcludedExtensions == null):
+	if (ExcludedPaths == []):#When we hit this, somthing will have gone wrong.
 		return false
 	
-	return false
+	if path in ExcludedPaths:
+		return false
+	return true
 
 func is_valid_file(path:String, fileName:String) -> bool:
 	if (ExcludedExtensions == []):#for safty, we are going to ignore everything
