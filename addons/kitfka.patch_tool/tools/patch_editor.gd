@@ -9,11 +9,6 @@ const EDITMENU_RESET_COMPLETE = 1
 const EDITMENU_SCAN = 2
 const EDITMENU_INIT = 3
 
-
-
-
-
-
 onready var _fileMenu_menuButton : MenuButton = $VBoxContainer/MenuBar/FileMenu
 onready var _editMenu_menuButton : MenuButton = $VBoxContainer/MenuBar/EditMenu
 
@@ -30,7 +25,6 @@ $VBoxContainer/Main/LeftPane/StringList
 onready var _packtool : Node = $Node
 
 var _base_control : Control = null
-
 
 var patchName:String = ""
 
@@ -54,6 +48,7 @@ func _ready():
 	_editMenu_menuButton.get_popup().add_item("complete scan", EDITMENU_SCAN)
 	_editMenu_menuButton.get_popup().add_item("initial setup", EDITMENU_INIT)
 
+
 func reload_gui():
 	reload_history()
 	if _packtool.ValidData:
@@ -63,10 +58,12 @@ func reload_gui():
 		_status_label.text = "no ValidData"
 		_build_button.disabled = true
 
+
 func reload_history():
 	_stringList_itemList.clear()
 	for item in _packtool.get_patchHistory():
 		_stringList_itemList.add_item(item, null, false)
+
 
 func configure_for_godot_integration(base_control: Control):
 	# You have to call this before adding to the tree
@@ -78,8 +75,6 @@ func configure_for_godot_integration(base_control: Control):
 
 
 #signal stuff
-
-
 func _on_BuildButton_pressed():
 	if patchName == "":
 		_status_label.text = "Build failed, patch name is empty"
@@ -98,12 +93,15 @@ func _on_BuildButton_pressed():
 	_status_label.text = "Build was a Succes"
 	reload_gui()
 
+
 func _on_FileName_text_changed(new_text):
 	patchName = new_text
 
+
 func _on_fileMenu_pressed(id):
 	pass
-	
+
+
 func _on_editMenu_pressed(id):
 	match id:
 		EDITMENU_RESET_COMPLETE:
@@ -123,11 +121,10 @@ func _on_editMenu_pressed(id):
 				_status_label.text = "oke, init was done"
 			else:
 				_status_label.text = "Init failed"
-		
 
 
 func _on_ScanButton_pressed():
-	_packtool._ready()
+	_packtool.reload_settings()
 	_packtool.load_data()
 	_packtool.save_data()
 	_fileChangeList_itemList.clear()

@@ -1,7 +1,7 @@
 tool
 extends Node
 
-export(bool) var testRun setget testRunSet
+export(bool) var testRun setget _testRunSet
 #export(bool) var testExport setget testExportRunSet thiss will bring problems
 
 export(Resource) var data
@@ -17,6 +17,10 @@ var ExcludedFilePaths : Array
 
 func _ready():
 	check_data()
+	reload_settings()
+
+
+func reload_settings():
 	if ProjectSettings.has_setting("patch_tool/excluded_extensions"):
 		ExcludedExtensions = ProjectSettings.get_setting("patch_tool/excluded_extensions")
 	else:
@@ -34,7 +38,8 @@ func _ready():
 		ExcludedFilePaths = ProjectSettings.get_setting("patch_tool/excluded_filepaths")
 	else:
 		ExcludedFilePaths = []
-		
+
+
 func check_data():
 	if data:
 		if not data.type == "PatchStamp":
@@ -43,7 +48,8 @@ func check_data():
 			
 		ValidData = true
 
-func testRunSet(value):
+
+func _testRunSet(value):
 	_ready()
 	print("extension ignored: ", ExcludedExtensions)
 	print("Folders ignored: ", ExcludedPaths)
@@ -52,9 +58,8 @@ func testRunSet(value):
 	load_data()
 	JSON.print(data.data, "\t")
 	testRun = false
-	
 
-	
+
 func load_data():
 	var filepath:String
 #	print(ProjectSettings.get_setting("patch_tool/data_folder"))
@@ -79,6 +84,7 @@ func load_data():
 	
 	find_all_files("res://")
 
+
 func new_diff(complete:bool = false):
 	if !ValidData:
 		print("No valid data found")
@@ -86,11 +92,11 @@ func new_diff(complete:bool = false):
 	
 	if data.data.size() == 0:
 		complete = true
-	
+
+
 func find_all_files(path:String):
 	if !ValidData:
 		return
-
 	
 	var dir = Directory.new()
 	if dir.open(path) == OK:
@@ -104,14 +110,15 @@ func find_all_files(path:String):
 					print("Skipped directory: " + file_name)
 				
 			else:
-				if is_valid_file(path, file_name): 
+				if _is_valid_file(path, file_name): 
 					print("Found file: " + file_name, "-",get_hash(path + file_name))
-					handle_file(path+file_name, get_hash(path + file_name))
+					_handle_file(path+file_name, get_hash(path + file_name))
 				else:
 					print("Skipped file: " + file_name)
 			file_name = dir.get_next()
 	else:
 		print("An error occurred when trying to access the path.")
+
 
 func is_valid_folder(path) -> bool:
 	if (ExcludedPaths == []):#When we hit this, somthing will have gone wrong.
@@ -121,7 +128,8 @@ func is_valid_folder(path) -> bool:
 		return false
 	return true
 
-func is_valid_file(path:String, fileName:String) -> bool:
+
+func _is_valid_file(path:String, fileName:String) -> bool:
 	if (ExcludedExtensions == []):#for safty, we are going to ignore everything
 		return false
 	
@@ -140,7 +148,8 @@ func is_valid_file(path:String, fileName:String) -> bool:
 		return false
 	return true
 
-func handle_file(filePath:String, fileHash:String):
+
+func _handle_file(filePath:String, fileHash:String):
 	if data.data.has(filePath):
 		if data.data[filePath].current_file_hash != fileHash:
 			data.data[filePath].current_file_hash = fileHash
@@ -151,13 +160,15 @@ func handle_file(filePath:String, fileHash:String):
 			"updated_file": true
 		}
 
+
 func is_there_a_updated_file() -> bool:
 	var result = false
 	for k in data.data:
 		if data.data[k].updated_file:
 			result = true
 	return result
-	
+
+
 func create_patch(ExportPath:String="res://", packName:String="test.pck"):
 	if is_there_a_updated_file():
 		print("start patch")
@@ -175,6 +186,7 @@ func create_patch(ExportPath:String="res://", packName:String="test.pck"):
 			packer.add_file(k, k)
 	packer.flush(true)
 
+
 func to_patch() -> Array:
 	var resultArray = []
 	for k in data.data:
@@ -183,10 +195,12 @@ func to_patch() -> Array:
 
 	return resultArray
 
+
 func reset_complete():
 	data = PatchStamp.new()
 	save_data()
-	
+
+
 func initial_setup():
 	if data:
 		print("data not null")
@@ -196,23 +210,25 @@ func initial_setup():
 		save_data()
 		return OK
 
+
 func save_data():
 	var filepath:String
 	if ProjectSettings.has_setting("patch_tool/data_folder"):
 		filepath = ProjectSettings.get_setting("patch_tool/data_folder")
 		filepath += "/main.tres"
-		print(filepath)
 		var f = File.new()
 		if f.file_exists(filepath):
 			ResourceSaver.save(filepath, data)
 		else:
 			print("File did not exist?")
 
+
 func get_patchHistory() -> Array:
 	if data:
 		return data.patchHistory
 	else:
 		return []
+
 
 func get_defaultPatchName() -> String:
 	var r = get_patchHistory()
@@ -221,10 +237,7 @@ func get_defaultPatchName() -> String:
 	else:
 		return r.back()
 
+
 static func get_hash(filePath:String) -> String:
-	print(filePath)
 	var file = File.new()
-#	file.open(filePath, File.READ)
-#	file.store_string(content)
-#	file.close()
 	return file.get_md5(filePath)
