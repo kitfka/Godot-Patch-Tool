@@ -33,8 +33,6 @@ func _ready():
 	if Util.is_in_edited_scene(self):
 		return
 	
-	_status_label.text = "Need to load stuff"
-	
 	_fileName_lineEdit.text = _packtool.get_defaultPatchName().get_basename()
 	patchName = _packtool.get_defaultPatchName().get_basename()
 	reload_gui()
