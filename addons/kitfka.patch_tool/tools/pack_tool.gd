@@ -17,10 +17,16 @@ func _ready():
 	if ProjectSettings.has_setting("patch_tool/excluded_extensions"):
 		ExcludedExtensions = ProjectSettings.get_setting("patch_tool/excluded_extensions")
 		print(ExcludedExtensions)
-		
+	else:
+		ExcludedExtensions = ["cs", "import"]
 	if ProjectSettings.has_setting("patch_tool/ignored_folders"):
 		ExcludedPaths = ProjectSettings.get_setting("patch_tool/excluded_extensions")
 		print(ExcludedPaths)
+	else:
+		ExcludedPaths = [
+		"res://addons", 
+		"res://.import",
+		]
 		
 func check_data():
 	if data:
@@ -31,6 +37,7 @@ func check_data():
 		ValidData = true
 
 func testRunSet(value):
+	_ready()
 	load_data()
 	testRun = false
 	
@@ -69,6 +76,7 @@ func new_diff(complete:bool = false):
 func find_all_files(path:String):
 	if !ValidData:
 		return
+	print("extension ignored: ", ExcludedExtensions)
 	var dir = Directory.new()
 	if dir.open(path) == OK:
 		dir.list_dir_begin(true, true)
@@ -78,7 +86,7 @@ func find_all_files(path:String):
 				print("Found directory: " + file_name)
 			else:
 				if is_valid_file(path, file_name): 
-					print("Found file: " + file_name)
+					print("Found file: " + file_name, "-",get_hash(path + file_name))
 				else:
 					print("Skipped file: " + file_name)
 			file_name = dir.get_next()
@@ -92,17 +100,18 @@ func is_valid_folder(path) -> bool:
 	return false
 
 func is_valid_file(path:String, fileName:String) -> bool:
-	if (ExcludedExtensions == null):
+	if (ExcludedExtensions == []):#for safty, we are going to ignore everything
 		return false
 	
-	if fileName.find("."):
-		pass
+	if fileName.find(".") == -1:
+		print("Will not have a extension?", fileName)
+		return false
+	
 	var fullPath = path+fileName
 	var extension = fullPath.get_extension()
-	print("extension: ", extension)
-#	if extension in ExcludedExtensions:
-#		return false
-	
+	if extension in ExcludedExtensions:
+		print("We are going to ignore the file: ", fileName)
+		return false
 	return true
 
 static func get_hash(filePath:String) -> String:
