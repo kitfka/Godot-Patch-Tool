@@ -2,7 +2,6 @@ tool
 extends Panel
 
 const Util = preload("./util/util.gd")
-const Logger = preload("./util/logger.gd")
 
 
 #file menu options
@@ -32,7 +31,6 @@ onready var _packtool : Node = $Node
 
 var _base_control : Control = null
 
-var _logger = Logger.get_for(self)
 
 var patchName:String = ""
 
@@ -59,8 +57,10 @@ func _ready():
 func reload_gui():
 	reload_history()
 	if _packtool.ValidData:
+		_status_label.text = "Press scan to start"
 		_build_button.disabled = false
 	else:
+		_status_label.text = "no ValidData"
 		_build_button.disabled = true
 
 func reload_history():

@@ -50,7 +50,7 @@ func testRunSet(value):
 	print("filepaths ignored: ", ExcludedFilePaths)
 	
 	load_data()
-	JSON.print(data.ddata, "\t")
+	JSON.print(data.data, "\t")
 	testRun = false
 	
 
@@ -141,20 +141,20 @@ func is_valid_file(path:String, fileName:String) -> bool:
 	return true
 
 func handle_file(filePath:String, fileHash:String):
-	if data.ddata.has(filePath):
-		if data.ddata[filePath].current_file_hash != fileHash:
-			data.ddata[filePath].current_file_hash = fileHash
-			data.ddata[filePath].updated_file = true
+	if data.data.has(filePath):
+		if data.data[filePath].current_file_hash != fileHash:
+			data.data[filePath].current_file_hash = fileHash
+			data.data[filePath].updated_file = true
 	else:
-		data.ddata[filePath] = {
+		data.data[filePath] = {
 			"current_file_hash": fileHash,
 			"updated_file": true
 		}
 
 func is_there_a_updated_file() -> bool:
 	var result = false
-	for k in data.ddata:
-		if data.ddata[k].updated_file:
+	for k in data.data:
+		if data.data[k].updated_file:
 			result = true
 	return result
 	
@@ -168,17 +168,17 @@ func create_patch(ExportPath:String="res://", packName:String="test.pck"):
 	var packer = PCKPacker.new()
 	data.patchHistory.append(packName)
 	packer.pck_start(ExportPath+packName)
-	for k in data.ddata:
-		if data.ddata[k].updated_file:
-			print(k,"-", data.ddata[k].current_file_hash)
-			data.ddata[k].updated_file = false # mark this file as procesed
+	for k in data.data:
+		if data.data[k].updated_file:
+			print(k,"-", data.data[k].current_file_hash)
+			data.data[k].updated_file = false # mark this file as procesed
 			packer.add_file(k, k)
 	packer.flush(true)
 
 func to_patch() -> Array:
 	var resultArray = []
-	for k in data.ddata:
-		if data.ddata[k].updated_file:
+	for k in data.data:
+		if data.data[k].updated_file:
 			resultArray.append(k)
 
 	return resultArray

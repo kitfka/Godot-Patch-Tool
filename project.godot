@@ -21,13 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Godot Patch Tool"
-run/main_scene="res://Test.tscn"
-config/icon="res://icon.png"
 
 [editor_plugins]
 
 enabled=PoolStringArray( "kitfka.patch_tool" )
-
-[rendering]
-
-environment/default_environment="res://default_env.tres"
