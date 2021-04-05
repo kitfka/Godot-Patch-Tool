@@ -46,6 +46,7 @@ toggle_mode = false
 text = "Debug"
 
 [node name="EditMenu" type="MenuButton" parent="VBoxContainer/MenuBar"]
+visible = false
 margin_left = 147.0
 margin_right = 183.0
 margin_bottom = 20.0

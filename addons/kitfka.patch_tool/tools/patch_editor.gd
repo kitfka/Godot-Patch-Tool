@@ -65,10 +65,13 @@ func _ready():
 	
 	#debug menu
 	_debugMenu_menuButton.get_popup().connect("id_pressed", self, "_on_debugMenu_pressed")
-	_debugMenu_menuButton.get_popup().add_item("print verbose", DEBUGMENU_PRINT_VERBOSE)
+	_debugMenu_menuButton.get_popup().add_check_item("print verbose", DEBUGMENU_PRINT_VERBOSE)
 	_debugMenu_menuButton.get_popup().add_item("DEBUGMENU_PRINT_DEBUGDATA", DEBUGMENU_PRINT_DEBUGDATA)
 	
-
+	#XD This should not be done, but it is a quick option for now.
+	_on_debugMenu_pressed(DEBUGMENU_PRINT_VERBOSE)
+	_on_debugMenu_pressed(DEBUGMENU_PRINT_VERBOSE)
+	
 func reload_gui():
 	reload_history()
 	if _packtool.ValidData:
@@ -149,10 +152,23 @@ func _on_patchMenu_pressed(id):
 func _on_debugMenu_pressed(id):
 	match id:
 		DEBUGMENU_PRINT_VERBOSE:
-			pass
+			if !ProjectSettings.has_setting("patch_tool/print_verbose"):
+				ProjectSettings.set_setting("patch_tool/print_verbose", true)
+			
+			#invert the setting
+			ProjectSettings.set_setting("patch_tool/print_verbose", \
+			!ProjectSettings.get_setting("patch_tool/print_verbose"))
+
+			#set the checkbox
+			var itemIndex = _debugMenu_menuButton.get_popup().get_item_index(DEBUGMENU_PRINT_VERBOSE)
+			_debugMenu_menuButton.get_popup().set_item_checked(itemIndex, \
+			ProjectSettings.get_setting("patch_tool/print_verbose"))
+			
 		DEBUGMENU_PRINT_DEBUGDATA:
 			for k in _packtool.data.data:
 				print(_packtool.data.data[k])
+
+
 
 func _on_ScanButton_pressed():
 	_packtool.reload_settings()
