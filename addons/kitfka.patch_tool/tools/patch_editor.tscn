@@ -26,14 +26,28 @@ margin_right = 1016.0
 margin_bottom = 20.0
 
 [node name="FileMenu" type="MenuButton" parent="VBoxContainer/MenuBar"]
-visible = false
 margin_right = 35.0
 margin_bottom = 20.0
 toggle_mode = false
 text = "File"
 
+[node name="PatchMenu" type="MenuButton" parent="VBoxContainer/MenuBar"]
+margin_left = 39.0
+margin_right = 86.0
+margin_bottom = 20.0
+toggle_mode = false
+text = "Patch"
+
+[node name="DebugMenu" type="MenuButton" parent="VBoxContainer/MenuBar"]
+margin_left = 90.0
+margin_right = 143.0
+margin_bottom = 20.0
+toggle_mode = false
+text = "Debug"
+
 [node name="EditMenu" type="MenuButton" parent="VBoxContainer/MenuBar"]
-margin_right = 36.0
+margin_left = 147.0
+margin_right = 183.0
 margin_bottom = 20.0
 toggle_mode = false
 text = "Edit"
@@ -73,8 +87,8 @@ text = "patch_0"
 
 [node name="ClearSearch" type="Button" parent="VBoxContainer/Main/LeftPane/Search"]
 visible = false
-margin_left = 254.0
-margin_right = 273.0
+margin_left = 171.0
+margin_right = 190.0
 margin_bottom = 24.0
 text = "x"
 

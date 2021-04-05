@@ -1,6 +1,7 @@
 tool
 extends Node
 
+signal build_progress(step, max_step)
 
 export(Resource) var data
 
@@ -95,6 +96,7 @@ func find_all_files(path:String):
 	if !ValidData:
 		return
 	
+	var tempHash :String = ""
 	var dir = Directory.new()
 	if dir.open(path) == OK:
 		dir.list_dir_begin(true, true)
@@ -109,8 +111,9 @@ func find_all_files(path:String):
 				
 			else:
 				if _is_valid_file(path, file_name): 
-					vprint("Found file: " + file_name+"-"+get_hash(path + file_name))
-					_handle_file(path+file_name, get_hash(path + file_name))
+					tempHash = get_hash(path + file_name)
+					vprint("Found file: " + file_name+"-"+tempHash)
+					_handle_file(path+file_name, tempHash)
 				else:
 					vprint("Skipped file: " + file_name)
 			file_name = dir.get_next()
@@ -147,17 +150,43 @@ func _is_valid_file(path:String, fileName:String) -> bool:
 
 
 func _handle_file(filePath:String, fileHash:String):
+	var lola = File.new()
 	if data.data.has(filePath):
 		if data.data[filePath].current_file_hash != fileHash:
 			data.data[filePath].current_file_hash = fileHash
 			data.data[filePath].updated_file = true
+			
+			data.data[filePath].get_modified_time = lola.get_modified_time(filePath)
+			#History
+#			filePath.get_file()
+			
 	else:
 		data.data[filePath] = {
 			"current_file_hash": fileHash,
-			"updated_file": true
+			"updated_file": true,
+			"get_modified_time": lola.get_modified_time(filePath),
+			"type": 0,#resurved value
+			"last_applied_patch": "",
+			"history": {},
 		}
 
-
+func _rollback_patch(packName:String) -> void:
+	if packName.length() < 4:
+		print(packName, "is to short!")
+		return# the extension should be 4 at the very least '.pck' so return!!!
+		
+	if !data.patchHistory.has(packName):
+		print("It did not include ", packName)
+		return
+		
+	for k in data.data:
+		if data.data[k].last_applied_patch == packName:
+			#this is a file that was added to a patch that i need to rollback!
+			var patchHistoryEntry:Dictionary = data.data[k].history[packName].duplicate(true)
+			data.data[k].history.erase(packName)
+			
+			var lastPatch:String = patchHistoryEntry.last_applied_patch
+	
 func is_there_a_updated_file() -> bool:
 	var result = false
 	for k in data.data:
@@ -166,12 +195,21 @@ func is_there_a_updated_file() -> bool:
 	return result
 
 
+func _amount_of_files_to_update() -> int:
+	var resultInt:int = 0
+	for k in data.data:
+		if data.data[k].updated_file:
+			resultInt += 1
+	return resultInt
+
 func create_patch(ExportPath:String="res://", packName:String="test.pck"):
 	if is_there_a_updated_file():
 		vprint("start patch")
 	else:
 		vprint("nothing to patch")
 		return
+	
+	var files_to_patch = _amount_of_files_to_update()
 	
 	var packer = PCKPacker.new()
 	data.patchHistory.append(packName)
@@ -180,6 +218,14 @@ func create_patch(ExportPath:String="res://", packName:String="test.pck"):
 		if data.data[k].updated_file:
 			vprint(k+"-"+ data.data[k].current_file_hash)
 			data.data[k].updated_file = false # mark this file as procesed
+			
+			data.data[k].history[packName] = {
+				"hash": data.data[k]["current_file_hash"],
+				"last_applied_patch": data.data[k].last_applied_patch,
+			}
+			#This is itentialy last, becouse we want rollback functionality 
+			#with this history thing
+			data.data[k].last_applied_patch = packName 
 			packer.add_file(k, k)
 	packer.flush(true)
 

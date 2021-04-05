@@ -5,11 +5,26 @@ const Util = preload("./util/util.gd")
 
 
 #file menu options
+const FILEMENU_MAIN_OPEN = 1
+
+const PATCHMENU_PATCH_ROLLBACK = 1
+const PATCHMENU_INIT = 2
+const PATCHMENU_RESET = 3
+const PATCHMENU_SCAN = 4
+
+const DEBUGMENU_PRINT_VERBOSE = 1
+const DEBUGMENU_PRINT_DEBUGDATA = 2
+
+#OLD MENU CONST, remove on 0.3
 const EDITMENU_RESET_COMPLETE = 1
 const EDITMENU_SCAN = 2
 const EDITMENU_INIT = 3
+const EDITMENU_ROLLBACK = 4
+
 
 onready var _fileMenu_menuButton : MenuButton = $VBoxContainer/MenuBar/FileMenu
+onready var _patchMenu_menuButton : MenuButton = $VBoxContainer/MenuBar/PatchMenu
+onready var _debugMenu_menuButton : MenuButton = $VBoxContainer/MenuBar/DebugMenu
 onready var _editMenu_menuButton : MenuButton = $VBoxContainer/MenuBar/EditMenu
 
 onready var _build_button : Button = \
@@ -39,13 +54,20 @@ func _ready():
 	
 	#Filemenu
 	_fileMenu_menuButton.get_popup().connect("id_pressed", self, "_on_fileMenu_pressed")
+	_fileMenu_menuButton.get_popup().add_item("open main", FILEMENU_MAIN_OPEN)
 
 	#Editmenu
-	_editMenu_menuButton.get_popup().connect("id_pressed", self, "_on_editMenu_pressed")
-	_editMenu_menuButton.get_popup().add_item("complete reset", EDITMENU_RESET_COMPLETE)
-	_editMenu_menuButton.get_popup().add_item("complete scan", EDITMENU_SCAN)
-	_editMenu_menuButton.get_popup().add_item("initial setup", EDITMENU_INIT)
-
+	_patchMenu_menuButton.get_popup().connect("id_pressed", self, "_on_patchMenu_pressed")
+	_patchMenu_menuButton.get_popup().add_item("rollback last patch", PATCHMENU_PATCH_ROLLBACK)
+	_patchMenu_menuButton.get_popup().add_item("initial setup", PATCHMENU_INIT)
+	_patchMenu_menuButton.get_popup().add_item("complete reset", PATCHMENU_RESET)
+	_patchMenu_menuButton.get_popup().add_item("complete scan", PATCHMENU_SCAN)
+	
+	#debug menu
+	_debugMenu_menuButton.get_popup().connect("id_pressed", self, "_on_debugMenu_pressed")
+	_debugMenu_menuButton.get_popup().add_item("print verbose", DEBUGMENU_PRINT_VERBOSE)
+	_debugMenu_menuButton.get_popup().add_item("DEBUGMENU_PRINT_DEBUGDATA", DEBUGMENU_PRINT_DEBUGDATA)
+	
 
 func reload_gui():
 	reload_history()
@@ -97,29 +119,40 @@ func _on_FileName_text_changed(new_text):
 
 
 func _on_fileMenu_pressed(id):
-	pass
+	print("file menu not implemented", id)
 
 
-func _on_editMenu_pressed(id):
+func _on_patchMenu_pressed(id):
 	match id:
-		EDITMENU_RESET_COMPLETE:
-			print("EDITMENU_RESET_COMPLETE")
+		PATCHMENU_RESET:
+			print("PATCHMENU_RESET")
 			_packtool.reset_complete()
 			reload_gui()
 			call_deferred("_on_ScanButton_pressed") #18 BUG, this doesn't work 
 #			_on_ScanButton_pressed()
 			
-		EDITMENU_SCAN:
-			print("EDITMENU_SCAN")
+		PATCHMENU_SCAN:
+			print("PATCHMENU_SCAN")
 			_packtool.load_data()
 			_packtool.save_data()
 			
-		EDITMENU_INIT:
+		PATCHMENU_INIT:
+			print("PATCHMENU_INIT")
 			if _packtool.initial_setup() == OK:
 				_status_label.text = "oke, init was done"
 			else:
 				_status_label.text = "Init failed"
+		PATCHMENU_PATCH_ROLLBACK:
+			print("PATCHMENU_PATCH_ROLLBACK")
+			_packtool._rollback_patch()
 
+func _on_debugMenu_pressed(id):
+	match id:
+		DEBUGMENU_PRINT_VERBOSE:
+			pass
+		DEBUGMENU_PRINT_DEBUGDATA:
+			for k in _packtool.data.data:
+				print(_packtool.data.data[k])
 
 func _on_ScanButton_pressed():
 	_packtool.reload_settings()

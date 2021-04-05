@@ -4,5 +4,58 @@
 
 [resource]
 script = ExtResource( 1 )
-data = { }
-patchHistory = [  ]
+data = {
+"res://.gitignore": {
+"current_file_hash": "ee2853bdb1ce7efaf4ad1e7dabb0e0b7",
+"get_modified_time": 1617445542,
+"history": {
+"patch_005.pck": {
+"hash": "ee2853bdb1ce7efaf4ad1e7dabb0e0b7",
+"last_applied_patch": ""
+}
+},
+"last_applied_patch": "patch_005.pck",
+"type": 0,
+"updated_file": false
+},
+"res://README.md": {
+"current_file_hash": "b7a7ef53f4a1acd91fa0851e6d4179da",
+"get_modified_time": 1617445542,
+"history": {
+"patch_005.pck": {
+"hash": "b7a7ef53f4a1acd91fa0851e6d4179da",
+"last_applied_patch": ""
+}
+},
+"last_applied_patch": "patch_005.pck",
+"type": 0,
+"updated_file": false
+},
+"res://new folder/new scene.tscn": {
+"current_file_hash": "8ea169d927ad7269a1827bbbbd55f43b",
+"get_modified_time": 1617552132,
+"history": {
+"patch_005.pck": {
+"hash": "8ea169d927ad7269a1827bbbbd55f43b",
+"last_applied_patch": ""
+}
+},
+"last_applied_patch": "patch_005.pck",
+"type": 0,
+"updated_file": false
+},
+"res://project.godot": {
+"current_file_hash": "25d6b0efb6c76a9428efcec4accece29",
+"get_modified_time": 1617611774,
+"history": {
+"patch_005.pck": {
+"hash": "25d6b0efb6c76a9428efcec4accece29",
+"last_applied_patch": ""
+}
+},
+"last_applied_patch": "patch_005.pck",
+"type": 0,
+"updated_file": false
+}
+}
+patchHistory = [ "patch_005.pck" ]
